@@ -1,0 +1,96 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>SmallLauncher</name>
+    </assembly>
+    <members>
+        <member name="T:Launcher.Launcher">
+            <summary>
+             Small Launcher 
+             It is possible to execute only .exe file in current directory.
+             
+            </summary>
+        </member>
+        <member name="M:Launcher.Launcher.DisableExitButton">
+            <summary>
+            Set close button to be disabled .
+            </summary>
+        </member>
+        <member name="M:Launcher.Launcher.ExitWithSHM(Microsoft.SmallBasic.Library.Primitive)">
+            <summary>
+             exit with str
+            </summary>
+            <param name="str">
+             send a return str to run process and exit
+            </param>
+            <returns>
+             no
+            </returns>
+        </member>
+        <member name="M:Launcher.Launcher.RunWithSHM(Microsoft.SmallBasic.Library.Primitive,Microsoft.SmallBasic.Library.Primitive)">
+            <summary>
+             Launch current directry exe
+            </summary>
+            <param name="filename">
+             not full path  eg. "prog.exe" not "c:\prgg.exe"
+            </param>
+            <param name="args">
+              args
+            </param>
+            <returns>
+             ret: Process Ret Code
+             -221 : bad path
+             -222 : run failure
+            </returns>
+        </member>
+        <member name="M:Launcher.Launcher.SimpleRun(Microsoft.SmallBasic.Library.Primitive,Microsoft.SmallBasic.Library.Primitive)">
+            <summary>
+             Launch current directry exe
+            </summary>
+            <param name="full_path">
+             not full path  eg. "c:\prgg.exe"
+            </param>
+            <param name="args">
+              args
+            </param>
+            <returns>
+             ret: Process Ret Code
+             -221 : bad path
+             -222 : run failure
+            </returns>
+        </member>
+        <member name="M:Launcher.Launcher.SimpleExit">
+            <summary>
+             exit with num
+            </summary>
+            <returns>
+             no
+            </returns>
+        </member>
+        <member name="M:Launcher.Launcher.RunExWindow(Microsoft.SmallBasic.Library.Primitive,Microsoft.SmallBasic.Library.Primitive,Microsoft.SmallBasic.Library.Primitive)">
+            <summary>
+             Launch current directry exe
+            </summary>
+            <param name="full_path">
+             full path  eg. "c:\prgg.exe"
+            </param>
+            <param name="args">
+              args
+            </param>
+            <param name="window">
+              true hide, false show , on return code
+            </param>
+            <returns>
+             ret: Process Ret Code
+             -221 : bad path
+             -222 : run failure
+             -223 : forbiten
+            </returns>
+        </member>
+        <member name="P:Launcher.Launcher.Version">
+            <summary><para>
+             Version
+            </para></summary>
+        </member>
+    </members>
+</doc>

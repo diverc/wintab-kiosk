@@ -1,0 +1,98 @@
+Version="1.5.1-20210226" 'run
+Launcher.Version = "magic"
+LoadParm()
+initForm()
+Controls.ButtonClicked = OnBC
+Controls.TextTyped = OnTT
+
+sub initForm
+  GraphicsWindow.Width = 1000
+  GraphicsWindow.Height = 500
+  GraphicsWindow.Title = "Mini Kiosk Launcher    " + Version
+  GraphicsWindow.Top=0
+  GraphicsWindow.Left=0
+  GraphicsWindow.CanResize="False"
+  GraphicsWindow.FontSize = 18
+  GraphicsWindow.BackgroundColor="Gray"
+  Button[1] = Controls.AddButton(TitleAry[1],0,0)
+  Button[2] = Controls.AddButton(TitleAry[2],0,100)
+  Button[3] = Controls.AddButton(TitleAry[3],0,200)
+  Button[4] = Controls.AddButton(TitleAry[4],0,300)
+  Button[5] = Controls.AddButton(TitleAry[5],440,0)
+  Button[6] = Controls.AddButton(TitleAry[6],440,100)
+  Button[7] = Controls.AddButton(TitleAry[7],440,200)
+  Button[8] = Controls.AddButton(TitleAry[8],440,300)
+
+  Button[9] = Controls.AddButton("Wifi/battery表示",0,400)
+  Button[10] = Controls.AddButton("Exit",440,400)
+  passTextBox = Controls.AddTextBox(0,470)
+  for i = 1 to 10
+    Controls.SetSize(Button[i], 400, 70)
+  endfor  
+  Launcher.DisableExitButton()
+  If Program.ArgumentCount >= 1 then
+    confPassword=Program.GetArgument(1)
+  Else
+    confPassword="magic"
+  EndIf
+  confExecOne=Program.GetArgument(2)
+EndSub
+
+Sub LoadParm
+  For i=1 To 8
+    TitleAry[i] = File.ReadLine(File.GetSettingsFilePath(),(i-1)*3+1)
+    PathAry[i]  = File.ReadLine(File.GetSettingsFilePath(),(i-1)*3+2)
+    ArgAry[i]   = File.ReadLine(File.GetSettingsFilePath(),(i-1)*3+3)
+  EndFor
+EndSub
+
+Sub OnBC  
+  If Button[1] = Controls.LastClickedButton Then
+    ret=Launcher.RunExWindow(PathAry[1],ArgAry[1],"on")
+  ElseIf Button[2] = Controls.LastClickedButton Then
+    ret=Launcher.RunExWindow(PathAry[2],ArgAry[2],"on")
+  ElseIf Button[3] = Controls.LastClickedButton Then
+    ret=Launcher.RunExWindow(PathAry[3],ArgAry[3],"on")
+  ElseIf Button[4] = Controls.LastClickedButton Then
+    ret=Launcher.RunExWindow(PathAry[4],ArgAry[4],"on")
+  ElseIf Button[5] = Controls.LastClickedButton Then
+    ret=Launcher.RunExWindow(PathAry[5],ArgAry[5],"on")
+  ElseIf Button[6] = Controls.LastClickedButton Then
+    ret=Launcher.RunExWindow(PathAry[6],ArgAry[6],"on")
+  ElseIf Button[7] = Controls.LastClickedButton Then
+    ret=Launcher.RunExWindow(PathAry[7],ArgAry[7],"on")
+  ElseIf Button[8] = Controls.LastClickedButton Then
+    ret=Launcher.RunExWindow(PathAry[8],ArgAry[8],"on")
+  ElseIf Button[9] = Controls.LastClickedButton Then
+    battery_wifi()
+  ElseIf Button[10] = Controls.LastClickedButton Then
+    Program.End()
+  EndIf
+  If confExecOne = "" and Button[9] <> Controls.LastClickedButton then
+    Program.End()
+  EndIf  
+EndSub
+
+Sub OnTT  
+  If confPassword = Controls.GetTextBoxText(passTextBox)  Then
+    configure()
+  EndIf  
+EndSub
+  
+Sub configure
+    GraphicsWindow.Title = "管理者モード"
+    Controls.SetTextBoxText(passTextBox,"")
+    ret=Launcher.RunExWindow("explorer.exe","","on")
+EndSub
+
+Sub battery_wifi
+    ret=Launcher.RunExWindow("netsh","wlan show interface  ","false")
+    offset=Text.GetIndexOf(ret,"%")
+    ret2=Launcher.RunExWindow("wmic","path Win32_Battery get EstimatedChargeRemaining /value","false")
+    offset2=Text.GetIndexOf(ret2,"=")
+    If offset <> 0 Then     
+        GraphicsWindow.ShowMessage("Wifiの接続状態 シグナルは" + Text.GetSubText(ret,offset -3 ,5)+ "です","Wifiの電波強度")
+    EndIf
+    GraphicsWindow.ShowMessage("バッテリーは" +Text.GetSubText(ret2,offset2+1 ,3)+"パーセントです","バッテリーの量")
+    GraphicsWindow.Title = "一番下のテキストボックスに正しい合言葉を入力することで、管理画面に進みます。  "
+EndSub
